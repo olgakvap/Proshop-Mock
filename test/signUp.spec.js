@@ -1,6 +1,7 @@
 import {expect} from 'chai';
 import nock from 'nock';
-import{signup} from '../Utilities/request.js';
+import{signUp} from '../Utilities/request.js';
+
 
 describe('AUTH signup', function() {
     beforeEach(function() {
@@ -35,7 +36,7 @@ describe('AUTH signup', function() {
             "lastname": "McCullough",
         };
 
-        await signup(data).then(function (response) {
+        await signUp(data).then(function (response) {
             console.log(JSON.stringify(response.data));
         })
             .catch(function (error) {
