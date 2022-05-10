@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = "https://api.proshop.com";
+const BASE_URL = "https://qa-proshop.herokuapp.com";
 
 export function signUp(data){
     const config = {
