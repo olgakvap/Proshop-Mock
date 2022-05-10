@@ -1,34 +1,44 @@
-// import {expect} from 'chai';
-// import nock from 'nock';
-// import{signIn} from '../Utilities/request.js';
-//
-// describe('AUTH signIn', function() {
-//     beforeEach(function () {
-//         const signInResponse = {
-//             "msg": "Login successfull!",
-//             "success": true,
-//             "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMzllNmY5ZDcxMWQwZDExMzFhMTY5MCIsImlhdCI6MTY0ODU4MzY4MywiZXhwIjoxNjQ4NjcwMDgzfQ.yf6sipECTxuFY7_6dQX86xU0Fzqh5BBZrGQMLngxQ0A",
-//             "user": {
-//                 "id": "6239e6f9d711d0d1131a1690",
-//                 "name": "Zoe Smith",
-//                 "email": "zoe.smith@gmail.com",
-//                 "isAdmin": false
-//             }
-//         };
-//
-//         it('should sign in with valid data', async function () {
-//             const data = {
-//                 "email": "Delta_Labadie1@hotmail.com",
-//                 "password": "Pa33word!"
-//             };
-//
-//             await signIn(data).then(function (response) {
-//                 console.log(JSON.stringify(response.data));
-//             })
-//                 .catch(function (error) {
-//                     console.log(error);
-//                 });
-//
-//         });
-//     });
-// });
+import {expect} from 'chai';
+import {deleteUser, signIn} from '../Utilities/request.js';
+import {adminData, validUser} from "../data/auth.data.js";
+import { expected } from '../data/expected.js';
+
+describe('AUTH signIn', function() {
+    describe('SMOKE',function() {
+        let regSignIn = null;
+
+    before(async () => {
+        regSignIn = await signIn(validUser);
+    });
+
+    it('should return status code 200',   () => {
+        expect(regSignIn.status).to.eq(200);
+    });
+
+    it('should return correct message',   () => {
+        expect(regSignIn.data.msg).to.equal(expected.auth.msgSuccessfulSignIn);
+    });
+
+    it('Should return user token',() => {
+        expect(regSignIn.data).to.haveOwnProperty("token");
+        expect(regSignIn.data.token).not.to.be.empty;
+    });
+
+    it('Should return user with valid data',() => {
+        expect(regSignIn.data).to.haveOwnProperty("user");
+        expect(regSignIn.data.user).to.haveOwnProperty("id").not.to.be.empty;
+        expect(regSignIn.data.user).to.haveOwnProperty("username").not.to.be.empty;
+        expect(regSignIn.data.user).to.haveOwnProperty("email").not.to.be.empty;
+        expect(regSignIn.data.user).to.haveOwnProperty("isAdmin").to.be.false;
+    });
+
+    after(async function cleanUp() {
+        const loginResult = await signIn({
+            email: adminData.adminEmail,
+            password :adminData.adminPassword
+        });
+        let deleteResult = await deleteUser(regSignIn.data.user.id,loginResult.data.token);
+        expect(deleteResult.status).to.eq(200);
+       });
+    });
+});
