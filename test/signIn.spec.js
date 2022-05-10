@@ -1,35 +1,37 @@
 import {expect} from 'chai';
-import {deleteUser, signIn} from '../Utilities/request.js';
+import {deleteUser, signIn, signUp} from '../Utilities/request.js';
 import {adminData, validUser} from "../data/auth.data.js";
 import { expected } from '../data/expected.js';
 
 describe('AUTH signIn', function() {
     describe('SMOKE',function() {
-        let regSignIn = null;
+        let logInResult = null;
 
     before(async () => {
-        regSignIn = await signIn(validUser);
+        await signUp(validUser);
+        logInResult = await signIn(validUser);
+        console.log(logInResult.data);
     });
 
-    it('should return status code 200',   () => {
-        expect(regSignIn.status).to.eq(200);
-    });
+     it('should return status code 200',   () => {
+         expect(logInResult.status).to.eq(200);
+     });
 
     it('should return correct message',   () => {
-        expect(regSignIn.data.msg).to.equal(expected.auth.msgSuccessfulSignIn);
+        expect(logInResult.data.msg).to.equal(expected.auth.msgSuccessfulSignIn);
     });
 
     it('Should return user token',() => {
-        expect(regSignIn.data).to.haveOwnProperty("token");
-        expect(regSignIn.data.token).not.to.be.empty;
+        expect(logInResult.data).to.haveOwnProperty("token");
+        expect(logInResult.data.token).not.to.be.empty;
     });
 
     it('Should return user with valid data',() => {
-        expect(regSignIn.data).to.haveOwnProperty("user");
-        expect(regSignIn.data.user).to.haveOwnProperty("id").not.to.be.empty;
-        expect(regSignIn.data.user).to.haveOwnProperty("username").not.to.be.empty;
-        expect(regSignIn.data.user).to.haveOwnProperty("email").not.to.be.empty;
-        expect(regSignIn.data.user).to.haveOwnProperty("isAdmin").to.be.false;
+        expect(logInResult.data).to.haveOwnProperty("user");
+        expect(logInResult.data.user).to.haveOwnProperty("id").not.to.be.empty;
+        expect(logInResult.data.user).to.haveOwnProperty("username").not.to.be.empty;
+        expect(logInResult.data.user).to.haveOwnProperty("email").not.to.be.empty;
+        expect(logInResult.data.user).to.haveOwnProperty("isAdmin").to.be.false;
     });
 
     after(async function cleanUp() {
@@ -37,8 +39,8 @@ describe('AUTH signIn', function() {
             email: adminData.adminEmail,
             password :adminData.adminPassword
         });
-        let deleteResult = await deleteUser(regSignIn.data.user.id,loginResult.data.token);
+        let deleteResult = await deleteUser(logInResult.data.user.id,loginResult.data.token);
         expect(deleteResult.status).to.eq(200);
        });
-    });
+     });
 });
