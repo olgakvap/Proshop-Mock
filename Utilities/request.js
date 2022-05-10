@@ -26,5 +26,17 @@ export function signIn(data){
     return axios(config);
 }
 
+export function deleteUser(id, token){
+    const config = {
+        method: 'delete',
+        url: `${BASE_URL}/api/users/${id}`,
+        headers: {
+            'Authorization': `Bearer ${token}`
+        },
+    };
+
+    return axios(config);
+}
+
 
 
