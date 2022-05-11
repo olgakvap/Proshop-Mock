@@ -1,5 +1,4 @@
 export const invalidUsernames = [
-    ' ',// with empty username
     '<br/>',// with enter(line brake)
     ' username',// with space before
     'username ',// with space at the end
@@ -48,7 +47,6 @@ export const validEmails = [
 ];
 
 export const invalidPassword = [
-    ' ',// with empty password
     ' Password12!',// with space at the front
     'Password12! ',// with space at the end
     'Password 12!',// with space in the middle
@@ -103,4 +101,6 @@ export const validUser = {
 export const adminData = {
     "adminEmail": "KaterinaV13@gmail.com",
     "adminPassword": "Pa33word!"
-}
+};
+
+

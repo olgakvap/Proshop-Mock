@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 import {deleteUser, signIn, signUp} from '../Utilities/request.js';
-import {adminData, validUser} from "../data/auth.data.js";
+import {adminData, validUser, validEmails, invalidPassword} from "../data/auth.data.js";
 import { expected } from '../data/expected.js';
 
 describe('AUTH signIn', function() {
@@ -9,8 +9,11 @@ describe('AUTH signIn', function() {
 
     before(async () => {
         await signUp(validUser);
-        logInResult = await signIn(validUser);
-        console.log(logInResult.data);
+        logInResult = await signIn({
+            email: validUser.email,
+            password :validUser.password
+        });
+        //console.log(logInResult.data);
     });
 
      it('should return status code 200',   () => {
@@ -43,4 +46,52 @@ describe('AUTH signIn', function() {
         expect(deleteResult.status).to.eq(200);
        });
      });
+
+    describe('Negative test for sign in user',function() {
+
+        it('Should return error for non-existing user', async () => {
+           try {
+               await signIn({
+                   email: validUser.email,
+                   password: validUser.password
+               });
+               expect.fail('Test failed')
+           } catch(error) {
+               if(error.name == 'AssertionError'){
+                   throw error;
+               }else{
+                   const{response: { status,data},} = error;
+                   expect(status).to.equal(404);
+                   expect(data).to.haveOwnProperty('message');
+                   expect(data.message).to.equal(expected.auth.msgFaildSignIn);
+               }
+           }
+
+        });
+
+        it('Should return error for valid email and invalid password', async () => {
+            for(let i = 0; i < invalidPassword.length; i++) {
+                try {
+                    await signIn({
+                        email: validUser.email,
+                        password: invalidPassword[i]
+                    });
+
+                    expect.fail('Test failed');
+
+                } catch (error) {
+                    if (error.name == 'AssertionError') {
+                        throw error;
+                    } else {
+                        const {response: {status, data},} = error;
+                        expect(status).to.equal(404);
+                        expect(data).to.haveOwnProperty('message');
+                        expect(data.message).to.equal(expected.auth.msgFaildSignIn);
+                    }
+                }
+            }
+
+        });
+
+    });
 });
