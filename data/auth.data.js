@@ -39,14 +39,14 @@ export const validEmails = [
     'Username@email.com',// with upper case
     'user.name@email.com',// with dot
     'username@subdomain.email.com',// with dot in subdomain
-    'user + name + lastname@email.com',// plus sign is considered a valid chars
+    'user+name+lastname@email.com',// plus sign is considered a valid chars
     'username@email-one.com',// with dash in domain name is valid
     'username@email.name',// .name is a valid Top level Domain name
     'user-name@email.com',// with dash in the address field is valid
     'username@email.co.jp',// Dot in Top level Domain name also considered valid(use co.jp as an example here)
 ];
 
-export const invalidPassword = [
+export const invalidPasswords = [
     ' Password12!',// with space at the front
     'Password12! ',// with space at the end
     'Password 12!',// with space in the middle

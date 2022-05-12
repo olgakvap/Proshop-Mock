@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 import {deleteUser, signIn, signUp} from '../Utilities/request.js';
-import {adminData, validUser, validEmails, invalidPassword} from "../data/auth.data.js";
+import {adminData, validUser, invalidPasswords} from "../data/auth.data.js";
 import { expected } from '../data/expected.js';
 
 describe('AUTH signIn', function() {
@@ -47,6 +47,8 @@ describe('AUTH signIn', function() {
        });
      });
 
+
+
     describe('Negative test for sign in user',function() {
 
         it('Should return error for non-existing user', async () => {
@@ -63,20 +65,19 @@ describe('AUTH signIn', function() {
                    const{response: { status,data},} = error;
                    expect(status).to.equal(404);
                    expect(data).to.haveOwnProperty('message');
-                   expect(data.message).to.equal(expected.auth.msgFaildSignIn);
+                   expect(data.message).to.equal(expected.auth.msgFailedSignIn);
                }
            }
 
         });
 
-        it('Should return error for valid email and invalid password', async () => {
-            for(let i = 0; i < invalidPassword.length; i++) {
+        invalidPasswords.forEach((invalidPassword) =>
+            it('should return error for valid user with valid email and invalid password', async () => {
                 try {
                     await signIn({
                         email: validUser.email,
-                        password: invalidPassword[i]
+                        password: invalidPassword
                     });
-
                     expect.fail('Test failed');
 
                 } catch (error) {
@@ -86,12 +87,9 @@ describe('AUTH signIn', function() {
                         const {response: {status, data},} = error;
                         expect(status).to.equal(404);
                         expect(data).to.haveOwnProperty('message');
-                        expect(data.message).to.equal(expected.auth.msgFaildSignIn);
+                        expect(data.message).to.equal(expected.auth.msgFailedSignIn);
                     }
                 }
-            }
-
-        });
-
+            }));
     });
 });
