@@ -1,11 +1,13 @@
+import {MIN_USERNAME, MAX_USERNAME} from '../data/auth.data.js';
+
 const alpha = [...'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'];
 const lowerChars = [...'abcdefghijklmnopqrstuvwxyz'];
 const upperChars = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
 const numbers = [...'0123456789'];
 const specialChars = '!@#$%^&*';
+const randomLength = Math.trunc(Math.random() * (MAX_USERNAME - MIN_USERNAME + 1) + MIN_USERNAME);
 
-
-export const getRandomStringOfLength = (
+export const getRandomString = (
     length,
     hasNumbers = true,
     hasSymbols = true,
@@ -24,9 +26,9 @@ export const getRandomStringOfLength = (
 };
 
 export const getRandomUsername = (
-    length = 10,
+    length = randomLength,
     hasNumbers = true,
     hasSymbols = true
 ) => {
-    return getRandomStringOfLength(length, hasNumbers, hasSymbols, '_.-');
+    return getRandomString(length, hasNumbers, hasSymbols, '_.-');
 };
