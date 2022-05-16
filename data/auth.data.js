@@ -8,19 +8,19 @@ export const invalidUsernames = [
     'zftghujkmnbgrewsxlmnb',// with max +1
 ];
 
-export const validUsername = [
-    'abc',// with min 3 username length
-    'abcd',// with min 4 username length
-    'zftghujkmnbgrewsxlmn',// with max 20 username length
-    'zftghujkmnbgrewsxlm',// with max 19 username length
-    'zftghujkmn',// with max 10(middle) username length
-    'username_',// with underscore
-    'username.',// with dot
-    'username12',// with digits
-    'Username', //with 1 uppercase letter
-    'Username1_._5.a-b',// with combinations chars
-    'USERNAME',// with all capital letters
-];
+// export const validUsername = [
+//     'abc',// with min 3 username length
+//     'abcd',// with min 4 username length
+//     'zftghujkmnbgrewsxlmn',// with max 20 username length
+//     'zftghujkmnbgrewsxlm',// with max 19 username length
+//     'zftghujkmn',// with max 10(middle) username length
+//     'username_',// with underscore
+//     'username.',// with dot
+//     'username12',// with digits
+//     'Username', //with 1 uppercase letter
+//     'Username1_._5.a-b',// with combinations chars
+//     'USERNAME',// with all capital letters
+// ];
 
 export const invalidEmails = [
     'username.email.com',// without @
@@ -59,12 +59,12 @@ export const invalidPasswords = [
     'Password!',// with no digits
     'Password2',// with no special chars
 ];
-
-export const validPassword= [
-    'Passd2!',// with min+1(7)
-    'Password2!Password2',// with max -1 (19)
-    'Password2!',// with middle length(10)
-];
+// не используем , тк randomizer
+// export const validPassword= [
+//     'Passd2!',// with min+1(7)
+//     'Password2!Password2',// with max -1 (19)
+//     'Password2!',// with middle length(10)
+// ];
 
 export const validFirstName =[
     'F', //with min 1 length
@@ -103,4 +103,8 @@ export const adminData = {
     "adminPassword": "Pa33word!"
 };
 
-
+export const MIN_USERNAME = 3;
+export const MAX_USERNAME = 20;
+export const MIN_PASSWORD = 6;
+export const MAX_PASSWORD = 20;
+export const MAX_FIRSTNAME = 20;

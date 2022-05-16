@@ -63,7 +63,7 @@ describe('AUTH signIn', function() {
                    throw error;
                }else{
                    const{response: { status,data},} = error;
-                   expect(status).to.equal(404);
+                   expect(status).to.equal(400);
                    expect(data).to.haveOwnProperty('message');
                    expect(data.message).to.equal(expected.auth.msgFailedSignIn);
                }
@@ -85,7 +85,7 @@ describe('AUTH signIn', function() {
                         throw error;
                     } else {
                         const {response: {status, data},} = error;
-                        expect(status).to.equal(404);
+                        expect(status).to.equal(400);
                         expect(data).to.haveOwnProperty('message');
                         expect(data.message).to.equal(expected.auth.msgFailedSignIn);
                     }

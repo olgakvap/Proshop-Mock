@@ -1,7 +1,10 @@
-import {deleteUser, signUp, signIn} from '../Utilities/request.js';
-import {validUser, adminData, validEmails, validPassword, validUsername} from '../data/auth.data.js';
-import { expected } from '../data/expected.js';
 import { expect } from 'chai';
+import { deleteUser, signUp, signIn } from '../utilities/request.js';
+import { validUser, adminData, validEmails, MIN_USERNAME, MAX_USERNAME } from '../data/auth.data.js';
+import { expected } from '../data/expected.js';
+import {faker} from '@faker-js/faker';
+import {getRandomUsername} from '../utilities/randomizer.js';
+
 
 
 describe('AUTH signup', function() {
@@ -70,33 +73,36 @@ describe('Email field',function() {
         });
     });
 
-    describe('Username field',function() {
+    describe('Username field', function() {
 
-        describe('Positive tests', function () {
+        describe('Positive tests', function() {
+            it('should allow to sign up with valid username ', async () => {
+                const validUsernameUser = {
+                    ...validUser,
+                    email: faker.internet.email(),
+                    username: getRandomUsername(),
+                };
+                let regResult = await signUp(validUsernameUser);
+                let userNameForConsole = regResult.data.user.username;
+                console.log('userName = ' + userNameForConsole);
+                console.log('length = ' + userNameForConsole.length);
+                expect(regResult.status).to.eq(201);
+                expect(regResult.data).to.haveOwnProperty('token');
+                expect(regResult.data.token).not.to.be.empty;
+                expect(regResult.data).to.haveOwnProperty('user');
 
-            validUsername.forEach(validUsername => {
-                it('should validate username field', async () => {
-                    let regResult = await signUp({
-                        ...validUser,
-                        username: validUsername,
-                    });
-
-                    expect(regResult.status).to.eq(201);
-                    expect(regResult.data).to.haveOwnProperty("token");
-                    expect(regResult.data.token).not.to.be.empty;
-                    expect(regResult.data).to.haveOwnProperty("user");
-
-                    const loginResult = await signIn({
-                        email: adminData.adminEmail,
-                        password: adminData.adminPassword
-                    });
-                    let deleteResult = await deleteUser(regResult.data.user.id, loginResult.data.token);
-                    expect(deleteResult.status).to.eq(200);
+                const loginResult = await signIn({
+                    email: adminData.adminEmail,
+                    password: adminData.adminPassword
                 });
+
+                let deleteResult = await deleteUser(regResult.data.user.id, loginResult.data.token);
+                expect(deleteResult.status).to.eq(200);
             });
         });
 
-
+        // describe('Negative tests', function() {
+        // });
     });
-
 });
+
