@@ -5,8 +5,6 @@ import { expected } from '../data/expected.js';
 import {faker} from '@faker-js/faker';
 import {getRandomPassword, getRandomUsername} from '../utilities/randomizer.js';
 
-
-
 describe('AUTH signup', function() {
     describe('SMOKE', function() {
         let regResult = null;
