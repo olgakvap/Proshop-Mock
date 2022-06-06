@@ -100,9 +100,6 @@ describe('Email field',function() {
                 expect(deleteResult.status).to.eq(200);
             });
         });
-
-        // describe('Negative tests', function() {
-        // });
     });
 
     describe('Password field', function() {
