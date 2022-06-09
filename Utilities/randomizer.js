@@ -42,27 +42,23 @@ export const getRandomLength= (
 
 export const getRandomPassword = (
     length = getRandomLength(MAX_PASSWORD, MIN_PASSWORD),
-    hasNumbers = true,
-    hasSymbols = true
+
 ) => {
     let str = '';
-    let str1 = generateString(Math.trunc(length / 4), upperChars);
-    str = str + str1;
-    console.log("str1 = " + str1);
-    let str2 = generateString(Math.trunc(length / 4), numbers);
-    console.log("str2 = " + str2);
-    if (hasNumbers) {
-        str = str + str2;
-    }
-    let str3 = generateString(Math.trunc(length / 4), specialChars);
-    console.log("str3 = " + str3);
-    if (hasSymbols) {
-        str = str + str3;
-    }
-    let str4 = generateString(Math.trunc(length / 4), lowerChars);
-    console.log("str4 = " + str4);
-    str = str + str4;
 
+    let str1 = generateString(Math.trunc(length / 4), upperChars);
+    let str2 = generateString(Math.trunc(length / 4), numbers);
+    let str3 = generateString(Math.trunc(length / 4), specialChars);
+    let str4 = generateString(length - 3 * Math.trunc(length / 4), lowerChars);
+    //console.log("str4 = ", str4)
+    for(let i = 0; i < str1.length; i++){
+        str += str1[i] + str2[i] + str3[i] + str4[i];
+    }
+    if (str4.length > str1.length){
+        for(let i = str1.length; i < str4.length; i++){
+            str += str4[i];
+        }
+    }
     return str;
 };
 
