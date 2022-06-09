@@ -98,6 +98,58 @@ describe('Email field',function() {
                 expect(deleteResult.status).to.eq(200);
             });
         });
+
+        describe('Negative tests',function(){
+            it('Should return error when Signup with empty username', async () => {
+                try {
+                    await signUp({
+                        ...validUser,
+                        email: faker.internet.email(),
+                        username: '',
+                    });
+                    expect.fail('Test failed')
+                } catch(error) {
+                    if(error.name == 'AssertionError'){
+                        throw error;
+                    }else{
+                        const{response: { status,data},} = error;
+                        expect(status).to.equal(400);
+                        expect(data).to.haveOwnProperty('message');
+                        expect(data.message).to.equal(expected.auth.msgFailedSignUp);
+                    }
+                }
+            });
+
+            it('Should return error when Signup with duplicated username', async () => {
+                let regResult = null;
+                regResult = await signUp(validUser);
+                    //console.log(regResult.data);
+
+                try {
+                    await signUp({
+                        ...validUser,
+                        email: faker.internet.email(),
+                    });
+                    expect.fail('Test failed')
+
+                } catch(error) {
+                    if(error.name == 'AssertionError'){
+                        throw error;
+                    }else{
+                        const{response: { status,data},} = error;
+                        expect(status).to.equal(400);
+                        expect(data).to.haveOwnProperty('message');
+                        expect(data.message).to.equal(expected.auth.msgFailedDuplicatedUsername);
+                    }
+                }
+                const loginResult = await signIn({
+                    email: adminData.adminEmail,
+                    password :adminData.adminPassword
+                });
+                let deleteResult = await deleteUser(regResult.data.user.id,loginResult.data.token);
+                expect(deleteResult.status).to.eq(200);
+            });
+        })
     });
 
     describe('Password field', function() {
